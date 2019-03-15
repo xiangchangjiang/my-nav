@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>我的导航4 </title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <head></head>
+  <main >
+    <style>
+  
+    </style>
+    <!-- <kbd class="key">A</kbd> -->
+    <div class="wrapper" id="xx"></div>
+
+  </main>
+  <footer></footer>
+  <script>
+
+
+
+
+    //  1.初始化数据
+    var hashA=init()
+    var arr1 = hashA['arr1']
+    var hash = hashA['hash']
+
+    // 2.生成键盘
+    generateKeyboard(arr1,hash)
+
+    //  3.监听键盘
+    listenToUser(hash)
+
+
+
+
+    //下面是工具函数
+    function getFromLocalStorage(name){
+      return JSON.parse(localStorage.getItem(name)||'null')
+    }
+    function tag(tagName){
+      return document.createElement(tagName)  
+    }
+
+    function createSpan(textContent){
+      var span=tag('span')
+      span.textContent=textContent
+      return span
+    }
+
+    function creaetButton(id){
+      var button = tag('button')
+      button.id=id
+      button.textContent='edit'
+      button.onclick=function(xxx){
+        newWebsite=prompt('请输入一个网址') 
+        keys=xxx['target']
+        hash[keys['id']] = newWebsite
+
+        var img2=keys.previousSibling
+        img2.src="http://"+newWebsite+"/favicon.ico"
+        img2.onerror=function(xxxx){
+          console.log(xxxx)
+          xxxx.target.src="//i.loli.net/2019/03/14/5c8a1b20374e3.png"
+        }
+        localStorage.setItem('newhash',JSON.stringify(hash))
+      }
+      return  button 
+    }
+
+    function createImage(domain){
+      var img=tag('img')
+        if(domain){
+          img.src='http://'+domain+'/favicon.ico'
+        }
+        else{
+          img.src="//i.loli.net/2019/03/14/5c8a1b20374e3.png"
+        }
+        img.onerror=function(xxxx){
+          //console.log(xxxx)
+          xxxx.target.src="//i.loli.net/2019/03/14/5c8a1b20374e3.png"
+        }
+        return img
+    }
+
+    function init(){
+      var arr1={
+      '0':{0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p','length':10},
+      '1':{0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l','length':9},
+      '2':{0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m','length':7},
+      length:3
+      }
+      var hash={
+        'q':'qq.com',
+        'w':'weibo.com',
+        'e':'ele.me',
+        'r':'renren.com',
+        't':'tianya.com',
+        'y':'youtube.com',
+        'u':'uc.com',
+        'i':'iqiyi.com',
+        'o':'opera.com',
+        'p':undefined,
+        'a':'acfun.tv',
+        's':'sohu.com',
+        'z':'zhihu.com',
+        'm':'www.mcdonald.com'
+      }
+      
+      var hashInlocalStorage = getFromLocalStorage('newhash')
+      
+      if (hashInlocalStorage){
+        hash=hashInlocalStorage
+      }
+      return {
+        "arr1":arr1,
+        "hash":hash
+      }
+    }
+
+
+    function generateKeyboard(arr1,hash){
+      for(index=0;index<arr1['length'];index=index+1){
+        var div1 = tag('div')     
+        div1.className='row'
+        xx.appendChild(div1)
+        var row=arr1[index]
+
+        for(var index2 = 0;index2<row['length'];index2=index2+1){
+          var span = createSpan(row[index2])
+
+          var img=createImage(hash[row[index2]])
+
+          var button=creaetButton(row[index2])
+
+          var kbd = tag('kbd')      
+          kbd.className=('key')
+          kbd.appendChild(img)
+          kbd.appendChild(button)
+          kbd.appendChild(span)   
+
+          div1.appendChild(kbd) 
+        }
+      }      
+    }
+
+    function listenToUser(hash){
+      document.onkeypress = function(xxxxx){
+        console.log('你按了一个键')
+        //console.log(xxxxx)
+        var key=xxxxx['key']
+        //console.log(key)
+        var website=hash[key]
+        //console.log(website)
+        window.open('http://'+ website,'_blank')
+      }
+    }
+  </script>
+</body>
+</html>
